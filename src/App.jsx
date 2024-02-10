@@ -33,7 +33,9 @@ function App() {
 
   return (
     <div className="app">
-      <h1>{currentUser && currentUser.username}</h1>
+      <h1 className="text-3xl font-bold underline">
+        {currentUser && currentUser.username}
+      </h1>
       <button onClick={handelAllExpense}>Get All Expenses</button>
       <button>Get All Incomes</button>
 
