@@ -13,7 +13,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import logo from "../assets/logo-color.svg";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import {
   AccountBalanceWallet,
   Home,
@@ -22,6 +22,7 @@ import {
 } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import removeUserToken from "./../lib/utils/removeUserToken";
+import getUserToken from "./../lib/utils/getUserToken";
 
 const drawerWidth = 240;
 
@@ -80,6 +81,7 @@ const Applayout = () => {
     { title: "Income", path: "/income", icon: <AccountBalanceWallet /> },
     { title: "Expense", path: "/expense", icon: <PaymentOutlined /> },
   ];
+  if (!getUserToken()) return <Navigate to="signin" />;
 
   function handelLogout() {
     removeUserToken();

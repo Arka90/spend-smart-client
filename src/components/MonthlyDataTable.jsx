@@ -1,8 +1,9 @@
 import { Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import moment from "moment";
 
 const columns = [
-  { field: "id", headerName: "ID", width: 70 },
+  { field: "id", headerName: "ID", width: 130 },
 
   { field: "category", headerName: "Category", width: 130 },
   { field: "date", headerName: "Date", width: 130 },
@@ -11,7 +12,12 @@ const columns = [
 
 export default function MonthlyDataTable({ title, data }) {
   const rows = data.map((curr) => {
-    return { id: curr._id, ...curr };
+    return {
+      id: curr._id,
+      date: moment(curr.date).format("DD/MM/YYYY"),
+      category: curr.category,
+      amount: `${curr.amount}`,
+    };
   });
 
   return (
