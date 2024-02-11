@@ -51,6 +51,7 @@ const Home = () => {
     }
 
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (api.isLoading) return <Loader />;

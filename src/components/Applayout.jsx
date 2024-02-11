@@ -21,6 +21,7 @@ import {
   PaymentOutlined,
 } from "@mui/icons-material";
 import { Button } from "@mui/material";
+import removeUserToken from "./../lib/utils/removeUserToken";
 
 const drawerWidth = 240;
 
@@ -80,6 +81,11 @@ const Applayout = () => {
     { title: "Expense", path: "/expense", icon: <PaymentOutlined /> },
   ];
 
+  function handelLogout() {
+    removeUserToken();
+    navigate("/signin");
+  }
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -131,7 +137,7 @@ const Applayout = () => {
               </ListItem>
             ))}
           </List>
-          <Button variant="contained">
+          <Button onClick={handelLogout} variant="contained">
             {open && "Logout "} <LogoutOutlined />
           </Button>
         </Box>
