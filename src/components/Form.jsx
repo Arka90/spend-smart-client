@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import { Box } from "@mui/system";
-import moment from "moment";
+// import moment from "moment";
 import { useContext, useState } from "react";
 import createExpense from "../lib/expense/createExpense";
 import createIncome from "../lib/income/createIncome";
@@ -8,10 +8,14 @@ import { NetDataContext } from "../context/netDataContext/netDataContext";
 import getAllExpenses from "../lib/expense/getAllExpenses";
 import getAllIncome from "../lib/income/getAllIncome";
 
-const Form = ({ type }) => {
+const Form = ({ type, isEdit, selectedItem }) => {
   const [amount, setAmont] = useState(0);
   const [category, setCategory] = useState("");
-  const [date, setDate] = useState(moment().format("YYYY/MM/DD"));
+  const [date, setDate] = useState("");
+
+  console.log(isEdit);
+
+  console.log(selectedItem);
 
   const {
     setNetExpense,
@@ -114,6 +118,7 @@ const Form = ({ type }) => {
       >
         Submit
       </Button>
+      {isEdit && <Button variant="outlined">Cancel</Button>}
     </Box>
   );
 };

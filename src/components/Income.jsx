@@ -2,12 +2,13 @@ import { Box, Typography } from "@mui/material";
 import StatsCards from "./StatsCards";
 import NetDataTable from "./NetDataTable";
 import PieChart from "./PieChart";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NetDataContext } from "../context/netDataContext/netDataContext";
 import useApi from "../hooks/useApi";
 import getAllExpenses from "../lib/expense/getAllExpenses";
 import getAllIncome from "../lib/income/getAllIncome";
 import Form from "./Form";
+import EditableTable from "./EditableTable";
 
 const Income = () => {
   const {
@@ -22,6 +23,8 @@ const Income = () => {
     netIncome,
   } = useContext(NetDataContext);
 
+  const [isEdit, setIsEdit] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
   const api = useApi();
 
   useEffect(() => {
@@ -79,9 +82,17 @@ const Income = () => {
 
       <Box display="flex" flexWrap="wrap" gap="40px" marginTop="20px">
         <Box flex={2} padding="10px">
-          <Form type="income" />
-
-          <NetDataTable data={netIncome} type="income" />
+          <Form isEdit={isEdit} selectedItem={selectedItem} type="income" />
+          {/*
+                 <NetDataTable
+            handelIsEdit={setIsEdit}
+            handelSelectedItem={setSelectedItem}
+            data={netIncome}
+            type="income"
+          /> 
+        
+        */}
+          <EditableTable data={netIncome} />
         </Box>
         <Box
           flex={1}

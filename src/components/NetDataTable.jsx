@@ -5,7 +5,12 @@ import EditAction from "./EditData";
 import DeleteAction from "./DeleteData";
 import moment from "moment";
 
-const NetDataTable = ({ data, type }) => {
+const NetDataTable = ({ data, type, handelIsEdit, handelSelectedItem }) => {
+  function handelEdit(data) {
+    handelIsEdit(true);
+    handelSelectedItem(data);
+  }
+
   const columns = [
     { field: "id", headerName: "ID", width: 130 },
 
@@ -21,7 +26,13 @@ const NetDataTable = ({ data, type }) => {
       filterable: false,
       disableColumnMenu: true,
       renderCell: (params) => {
-        return <EditAction params={params} type={type} />;
+        return (
+          <EditAction
+            onClick={() => handelEdit(params)}
+            params={params}
+            type={type}
+          />
+        );
       },
     },
     {
