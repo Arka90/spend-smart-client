@@ -73,13 +73,21 @@ const Home = () => {
           justifyContent: { xs: "space-around", md: "flex-start" },
         }}
       >
-        <StatsCards color="#00796B" title="INCOME" value={totalMonthlyIncome} />
+        <StatsCards
+          color="#00796B"
+          title="MONTHLY INCOME"
+          value={totalMonthlyIncome}
+        />
         <StatsCards
           color="#B71C1C"
-          title="EXPENSE"
+          title="MONTHLY EXPENSE"
           value={totalMonthlyExpense}
         />
-        <StatsCards color="#1565C0" title="SAVING" value={totalMonthlySaving} />
+        <StatsCards
+          color="#1565C0"
+          title="MONTHLY SAVING"
+          value={totalMonthlySaving}
+        />
       </Box>
       <Box display="flex" flexWrap="wrap" gap="40px" marginTop="20px">
         <Box flex={1} padding="10px">

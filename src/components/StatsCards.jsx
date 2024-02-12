@@ -21,7 +21,7 @@ const StatsCards = ({ color, title, value }) => {
           sx={{ fontWeight: "lighter", letterSpacing: "5px", color: "#fff" }}
           variant="p"
         >
-          MONTHLY {title}
+          {title}
         </Typography>
         <Typography sx={{ fontWeight: "700", color: "#fff" }} variant="h3">
           ₹{value}

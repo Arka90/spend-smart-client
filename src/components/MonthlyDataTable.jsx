@@ -34,6 +34,7 @@ export default function MonthlyDataTable({ title, data }) {
           },
         }}
         pageSizeOptions={[5, 10]}
+        disableRowSelectionOnClick
       />
     </div>
   );
