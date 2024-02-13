@@ -37,6 +37,7 @@ const Form = ({ type }) => {
   async function handelSubmit() {
     api.startLoading();
     try {
+      console.log(category);
       const payload = { category, date, amount: Number(amount) };
 
       if (type === "income") {
@@ -105,6 +106,9 @@ const Form = ({ type }) => {
           id="cars"
           className="p-2"
         >
+          <option value="" disabled="disabled">
+            Choose Category
+          </option>
           {type == "income" &&
             incomeCategory.map((item) => (
               <option key={item} value={item}>
