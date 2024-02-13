@@ -16,6 +16,7 @@ import { UserContext } from "../context/userContext/userContext";
 import setUserToken from "../lib/utils/setUserToken";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import getUserToken from "../lib/utils/getUserToken";
+import { toast } from "react-toastify";
 
 const validationSchema = yup.object({
   username: yup
@@ -59,7 +60,7 @@ const AuthForm = ({ type }) => {
         api.setError();
         api.setResponseMessage();
 
-        alert(response.data.message);
+        toast(response.data.message);
       } finally {
         api.stopLoading();
       }

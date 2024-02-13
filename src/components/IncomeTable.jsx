@@ -1,7 +1,6 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
+
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
@@ -9,43 +8,32 @@ import CancelIcon from "@mui/icons-material/Close";
 import {
   GridRowModes,
   DataGrid,
-  GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import { randomId } from "@mui/x-data-grid-generator";
-// import createIncome from "../lib/income/createIncome";
 
-function EditToolbar(props) {
-  const { setRows, setRowModesModel } = props;
+import { NetDataContext } from "../context/netDataContext/netDataContext";
+import updateIncome from "../lib/income/updateIncome";
+import getAllExpenses from "../lib/expense/getAllExpenses";
+import getAllIncome from "../lib/income/getAllIncome";
+import deleteIncome from "../lib/income/deleteIncome";
+import { toast } from "react-toastify";
 
-  const handleClick = async () => {
-    const id = randomId();
-    setRows((oldRows) => [...oldRows, { id, name: "", age: "", isNew: true }]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "amount" },
-    }));
-  };
-
-  return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
-      </Button>
-    </GridToolbarContainer>
-  );
-}
-
-export default function EditableTable({ data }) {
+export default function IncomeTable({ data }) {
   const initialRows = data.map((curr) => {
     return {
       id: curr._id,
-
       ...curr,
     };
   });
 
+  const {
+    setNetExpense,
+    setNetIncome,
+    setTotalNetIncome,
+    setTotalNetExpense,
+    setTotalNetSaving,
+  } = React.useContext(NetDataContext);
   const [rows, setRows] = React.useState(initialRows);
 
   const [rowModesModel, setRowModesModel] = React.useState({});
@@ -61,15 +49,31 @@ export default function EditableTable({ data }) {
   };
 
   const handleSaveClick = (id) => () => {
-    const updatedRow = rows.find((row) => row.id === id);
-
-    console.log(updatedRow);
-
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id) => () => {
-    setRows(rows.filter((row) => row.id !== id));
+  const handleDeleteClick = (id) => async () => {
+    try {
+      await deleteIncome(id);
+
+      const expenseResponse = await getAllExpenses();
+      const incomeResponse = await getAllIncome();
+
+      setNetExpense(expenseResponse.data.expenses);
+      setNetIncome(incomeResponse.data.income);
+      setTotalNetExpense(expenseResponse.data.totalExpenseAmount);
+      setTotalNetIncome(incomeResponse.data.totalIncomeAmount);
+      setTotalNetSaving(
+        incomeResponse.data.totalIncomeAmount -
+          expenseResponse.data.totalExpenseAmount
+      );
+
+      toast("Income Deleted Successfully");
+
+      setRows(rows.filter((row) => row.id !== id));
+    } catch (error) {
+      console.log(error?.response?.data?.message);
+    }
   };
 
   const handleCancelClick = (id) => () => {
@@ -84,13 +88,42 @@ export default function EditableTable({ data }) {
     }
   };
 
-  const processRowUpdate = (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    return updatedRow;
+  // here call the api
+  const processRowUpdate = async (newRow) => {
+    try {
+      const updatedRow = { ...newRow, isNew: false };
+
+      await updateIncome(
+        {
+          category: updatedRow.category,
+          amount: updatedRow.amount,
+          date: updatedRow.date,
+        },
+        updatedRow._id
+      );
+
+      const expenseResponse = await getAllExpenses();
+      const incomeResponse = await getAllIncome();
+
+      setNetExpense(expenseResponse.data.expenses);
+      setNetIncome(incomeResponse.data.income);
+      setTotalNetExpense(expenseResponse.data.totalExpenseAmount);
+      setTotalNetIncome(incomeResponse.data.totalIncomeAmount);
+      setTotalNetSaving(
+        incomeResponse.data.totalIncomeAmount -
+          expenseResponse.data.totalExpenseAmount
+      );
+
+      setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+      toast("Income updated successfully !!");
+      return updatedRow;
+    } catch (error) {
+      toast("Error updating Income !!");
+    }
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
+    console.log(newRowModesModel);
     setRowModesModel(newRowModesModel);
   };
 
@@ -179,16 +212,13 @@ export default function EditableTable({ data }) {
       }}
     >
       <DataGrid
-        rows={rows}
+        rows={initialRows}
         columns={columns}
         editMode="row"
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: EditToolbar,
-        }}
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}

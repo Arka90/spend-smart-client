@@ -7,7 +7,6 @@ ChartJs.register(ArcElement, Tooltip, Legend);
 
 const PieChart = ({ chartData }) => {
   const dataNums = [];
-
   const label = chartData.reduce((acc, curr) => {
     if (!acc.includes(curr.category)) {
       return [...acc, curr.category];

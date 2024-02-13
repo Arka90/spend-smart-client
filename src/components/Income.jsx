@@ -1,14 +1,14 @@
 import { Box, Typography } from "@mui/material";
 import StatsCards from "./StatsCards";
-import NetDataTable from "./NetDataTable";
 import PieChart from "./PieChart";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { NetDataContext } from "../context/netDataContext/netDataContext";
 import useApi from "../hooks/useApi";
 import getAllExpenses from "../lib/expense/getAllExpenses";
 import getAllIncome from "../lib/income/getAllIncome";
 import Form from "./Form";
-import EditableTable from "./EditableTable";
+import IncomeTable from "./IncomeTable";
+import Loader from "./Loader";
 
 const Income = () => {
   const {
@@ -23,8 +23,6 @@ const Income = () => {
     netIncome,
   } = useContext(NetDataContext);
 
-  const [isEdit, setIsEdit] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
   const api = useApi();
 
   useEffect(() => {
@@ -55,6 +53,10 @@ const Income = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  if (api.isLoading) {
+    return <Loader />;
+  }
+
   return (
     <Box>
       <Box>
@@ -82,17 +84,11 @@ const Income = () => {
 
       <Box display="flex" flexWrap="wrap" gap="40px" marginTop="20px">
         <Box flex={2} padding="10px">
-          <Form isEdit={isEdit} selectedItem={selectedItem} type="income" />
-          {/*
-                 <NetDataTable
-            handelIsEdit={setIsEdit}
-            handelSelectedItem={setSelectedItem}
-            data={netIncome}
-            type="income"
-          /> 
-        
-        */}
-          <EditableTable data={netIncome} />
+          <Typography variant="h3" fontWeight={700}>
+            Table For Income
+          </Typography>
+          <Form type="income" />
+          <IncomeTable data={netIncome} />
         </Box>
         <Box
           flex={1}

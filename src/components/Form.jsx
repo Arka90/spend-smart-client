@@ -1,21 +1,20 @@
 import { Button } from "@mui/material";
 import { Box } from "@mui/system";
-// import moment from "moment";
 import { useContext, useState } from "react";
 import createExpense from "../lib/expense/createExpense";
 import createIncome from "../lib/income/createIncome";
 import { NetDataContext } from "../context/netDataContext/netDataContext";
 import getAllExpenses from "../lib/expense/getAllExpenses";
 import getAllIncome from "../lib/income/getAllIncome";
+import useApi from "../hooks/useApi";
+import { toast } from "react-toastify";
 
-const Form = ({ type, isEdit, selectedItem }) => {
+const Form = ({ type }) => {
   const [amount, setAmont] = useState(0);
   const [category, setCategory] = useState("");
   const [date, setDate] = useState("");
 
-  console.log(isEdit);
-
-  console.log(selectedItem);
+  const api = useApi();
 
   const {
     setNetExpense,
@@ -35,28 +34,39 @@ const Form = ({ type, isEdit, selectedItem }) => {
     "Others",
   ];
 
-  console.log();
-
   async function handelSubmit() {
-    const payload = { category, date, amount: Number(amount) };
+    api.startLoading();
+    try {
+      const payload = { category, date, amount: Number(amount) };
 
-    if (type === "income") {
-      await createIncome(payload);
-    } else {
-      await createExpense(payload);
+      if (type === "income") {
+        await createIncome(payload);
+      } else {
+        await createExpense(payload);
+      }
+
+      const expenseResponse = await getAllExpenses();
+      const incomeResponse = await getAllIncome();
+
+      setNetExpense(expenseResponse.data.expenses);
+      setNetIncome(incomeResponse.data.income);
+      setTotalNetExpense(expenseResponse.data.totalExpenseAmount);
+      setTotalNetIncome(incomeResponse.data.totalIncomeAmount);
+      setTotalNetSaving(
+        incomeResponse.data.totalIncomeAmount -
+          expenseResponse.data.totalExpenseAmount
+      );
+
+      setAmont(0);
+      setDate("");
+      setCategory("");
+
+      toast("Data Added");
+    } catch (error) {
+      toast(error.response.data.message);
+    } finally {
+      api.stopLoading();
     }
-
-    const expenseResponse = await getAllExpenses();
-    const incomeResponse = await getAllIncome();
-
-    setNetExpense(expenseResponse.data.expenses);
-    setNetIncome(incomeResponse.data.income);
-    setTotalNetExpense(expenseResponse.data.totalExpenseAmount);
-    setTotalNetIncome(incomeResponse.data.totalIncomeAmount);
-    setTotalNetSaving(
-      incomeResponse.data.totalIncomeAmount -
-        expenseResponse.data.totalExpenseAmount
-    );
   }
 
   return (
@@ -73,7 +83,7 @@ const Form = ({ type, isEdit, selectedItem }) => {
           type="text"
           value={amount}
           onChange={(e) => setAmont(e.target.value)}
-          className="peer bg-transparent text-blue-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-blue-gray-200 focus:border-gray-900"
+          className="peer bg-transparent text-blue-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border  border-t-transparent focus:border-t-transparent text-sm px-3 py-1 rounded-[7px] border-blue-gray-200 focus:border-gray-900"
         />
       </Box>
 
@@ -115,10 +125,10 @@ const Form = ({ type, isEdit, selectedItem }) => {
         sx={{ alignSelf: "end" }}
         onClick={handelSubmit}
         variant="contained"
+        disabled={api.isLoading}
       >
         Submit
       </Button>
-      {isEdit && <Button variant="outlined">Cancel</Button>}
     </Box>
   );
 };

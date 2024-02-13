@@ -1,6 +1,5 @@
 import { Box, Typography } from "@mui/material";
 import StatsCards from "./StatsCards";
-import NetDataTable from "./NetDataTable";
 import PieChart from "./PieChart";
 import { useContext, useEffect } from "react";
 import { NetDataContext } from "../context/netDataContext/netDataContext";
@@ -8,6 +7,7 @@ import useApi from "../hooks/useApi";
 import getAllExpenses from "../lib/expense/getAllExpenses";
 import getAllIncome from "../lib/income/getAllIncome";
 import Form from "./Form";
+import ExpenseTable from "./ExpenseTable";
 
 const Expense = () => {
   const {
@@ -79,8 +79,11 @@ const Expense = () => {
 
       <Box display="flex" flexWrap="wrap" gap="40px" marginTop="20px">
         <Box flex={2} padding="10px">
+          <Typography variant="h3" fontWeight={700}>
+            Table For Expense
+          </Typography>
           <Form type="expense" />
-          <NetDataTable data={netExpense} type="expense" />
+          <ExpenseTable data={netExpense} />
         </Box>
         <Box
           flex={1}
