@@ -123,7 +123,6 @@ export default function IncomeTable({ data }) {
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
-    console.log(newRowModesModel);
     setRowModesModel(newRowModesModel);
   };
 

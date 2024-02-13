@@ -139,7 +139,7 @@ const Applayout = () => {
               </ListItem>
             ))}
           </List>
-          <Button onClick={handelLogout} variant="contained">
+          <Button variant={open ? "contained" : ""} onClick={handelLogout}>
             {open && "Logout "} <LogoutOutlined />
           </Button>
         </Box>

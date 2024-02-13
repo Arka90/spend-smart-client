@@ -35,11 +35,11 @@ const PieChart = ({ chartData }) => {
         label: "# income from",
         data: dataNums,
         backgroundColor: [
-          "rgb(18, 55, 42 , 0.2)",
-          "rgb(155, 68, 68 , 0.2)",
-          "rgb(130, 3, 0 , 0.2)",
-          "rgb(255, 152, 0 , 0.2)",
-          "rgb(175, 38, 85 , 0.2)",
+          "rgb(100,149,247)",
+          "rgb(255,99,71)",
+          "rgb(173,127,255)",
+          "rgb(144,238,144)",
+          "rgb(255,255,153)",
         ],
         borderColor: [
           "rgb(18, 55, 42)",

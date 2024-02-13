@@ -1,16 +1,18 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import StatsCards from "./StatsCards";
 import MonthlyDataTable from "./MonthlyDataTable";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MonthlyDataContext } from "./../context/monthlyDataContext/monthlyDataContext";
 import getMonthlyExpenses from "../lib/expense/getMonthlyExpenses";
 import getMonthlyIncomes from "../lib/income/getMonthlyIncomes";
 import useApi from "./../hooks/useApi";
 import Loader from "./Loader";
+import YearMonthPicker from "./YearMonthPicker";
 
 const Home = () => {
-  const date = new Date();
-
+  const [date, setDate] = useState(new Date());
+  const [showPicker, setShowPicker] = useState(false);
+  const [value, setValue] = useState("");
   const {
     setMonthlyExpense,
     setMonthlyIncome,
@@ -30,8 +32,14 @@ const Home = () => {
     async function getData() {
       api.startLoading();
       try {
-        const expenseResponse = await getMonthlyExpenses();
-        const incomeResponse = await getMonthlyIncomes();
+        const expenseResponse = await getMonthlyExpenses(
+          date.getMonth() + 1,
+          date.getFullYear()
+        );
+        const incomeResponse = await getMonthlyIncomes(
+          date.getMonth() + 1,
+          date.getFullYear()
+        );
 
         setMonthlyExpense(expenseResponse.data.expenses);
         setMonthlyIncome(incomeResponse.data.income);
@@ -52,51 +60,85 @@ const Home = () => {
 
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [date]);
 
-  if (api.isLoading) return <Loader />;
+  // if (api.isLoading) return <Loader />;
+
+  function handelChangeDate() {
+    if (!value) {
+      setDate(new Date());
+    } else {
+      setDate(value.$d);
+    }
+
+    setShowPicker(false);
+  }
 
   return (
     <Box>
       <Box>
         <Typography variant="h3" sx={{ fontSize: { xs: "2rem", md: "3rem" } }}>
-          Stats for the month of {date.toString().split(" ")[1]},{" "}
-          {date.getFullYear()}
+          Stats for the month of{" "}
+          {showPicker ? (
+            <Box display="inline">
+              <YearMonthPicker value={value} setValue={setValue} />
+              <Button
+                sx={{ marginLeft: "15px" }}
+                onClick={handelChangeDate}
+                variant="contained"
+              >
+                Set Date
+              </Button>
+            </Box>
+          ) : (
+            <span
+              className="cursor-pointer"
+              onClick={() => setShowPicker(true)}
+            >
+              {date.toString().split(" ")[1]}, {date.getFullYear()}
+            </span>
+          )}
         </Typography>
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          marginTop: "40px",
-          gap: "28px",
-          justifyContent: { xs: "space-around", md: "flex-start" },
-        }}
-      >
-        <StatsCards
-          color="#00796B"
-          title="MONTHLY INCOME"
-          value={totalMonthlyIncome}
-        />
-        <StatsCards
-          color="#B71C1C"
-          title="MONTHLY EXPENSE"
-          value={totalMonthlyExpense}
-        />
-        <StatsCards
-          color="#1565C0"
-          title="MONTHLY SAVING"
-          value={totalMonthlySaving}
-        />
-      </Box>
-      <Box display="flex" flexWrap="wrap" gap="40px" marginTop="20px">
-        <Box flex={1} padding="10px">
-          <MonthlyDataTable title="Expense" data={monthlyExpense} />
-        </Box>
-        <Box flex={1} padding="10px">
-          <MonthlyDataTable title="Income" data={monthlyIncome} />
-        </Box>
-      </Box>
+      {api.isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              marginTop: "40px",
+              gap: "28px",
+              justifyContent: { xs: "space-around", md: "flex-start" },
+            }}
+          >
+            <StatsCards
+              color="#00796B"
+              title="MONTHLY INCOME"
+              value={totalMonthlyIncome}
+            />
+            <StatsCards
+              color="#B71C1C"
+              title="MONTHLY EXPENSE"
+              value={totalMonthlyExpense}
+            />
+            <StatsCards
+              color="#1565C0"
+              title="MONTHLY SAVING"
+              value={totalMonthlySaving}
+            />
+          </Box>
+          <Box display="flex" flexWrap="wrap" gap="40px" marginTop="20px">
+            <Box flex={1} padding="10px">
+              <MonthlyDataTable title="Expense" data={monthlyExpense} />
+            </Box>
+            <Box flex={1} padding="10px">
+              <MonthlyDataTable title="Income" data={monthlyIncome} />
+            </Box>
+          </Box>
+        </>
+      )}
     </Box>
   );
 };
