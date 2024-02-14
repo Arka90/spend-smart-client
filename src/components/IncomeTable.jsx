@@ -10,6 +10,8 @@ import {
   DataGrid,
   GridActionsCellItem,
   GridRowEditStopReasons,
+  GridToolbarContainer,
+  GridToolbarExport,
 } from "@mui/x-data-grid";
 
 import { NetDataContext } from "../context/netDataContext/netDataContext";
@@ -18,6 +20,14 @@ import getAllExpenses from "../lib/expense/getAllExpenses";
 import getAllIncome from "../lib/income/getAllIncome";
 import deleteIncome from "../lib/income/deleteIncome";
 import { toast } from "react-toastify";
+
+function CustomToolbar() {
+  return (
+    <GridToolbarContainer>
+      <GridToolbarExport />
+    </GridToolbarContainer>
+  );
+}
 
 export default function IncomeTable({ data }) {
   const initialRows = data.map((curr) => {
@@ -218,9 +228,15 @@ export default function IncomeTable({ data }) {
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
+        slots={{ toolbar: CustomToolbar }}
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
+        initialState={{
+          ...data.initialState,
+          pagination: { paginationModel: { pageSize: 5 } },
+        }}
+        pageSizeOptions={[5, 10, 25]}
       />
     </Box>
   );

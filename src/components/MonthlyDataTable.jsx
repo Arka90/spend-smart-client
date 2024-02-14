@@ -1,5 +1,9 @@
 import { Typography } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridToolbarContainer,
+  GridToolbarExport,
+} from "@mui/x-data-grid";
 import moment from "moment";
 
 const columns = [
@@ -9,6 +13,14 @@ const columns = [
   { field: "date", headerName: "Date", width: 130 },
   { field: "amount", headerName: "Amount(INR)", width: 130 },
 ];
+
+function CustomToolbar() {
+  return (
+    <GridToolbarContainer>
+      <GridToolbarExport />
+    </GridToolbarContainer>
+  );
+}
 
 export default function MonthlyDataTable({ title, data }) {
   const rows = data.map((curr) => {
@@ -35,6 +47,7 @@ export default function MonthlyDataTable({ title, data }) {
         }}
         pageSizeOptions={[5, 10]}
         disableRowSelectionOnClick
+        slots={{ toolbar: CustomToolbar }}
       />
     </div>
   );

@@ -1,9 +1,21 @@
 import { Box, Typography } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridToolbarContainer,
+  GridToolbarExport,
+} from "@mui/x-data-grid";
 
 import EditAction from "./EditData";
 import DeleteAction from "./DeleteData";
 import moment from "moment";
+
+function CustomToolbar() {
+  return (
+    <GridToolbarContainer>
+      <GridToolbarExport />
+    </GridToolbarContainer>
+  );
+}
 
 const NetDataTable = ({ data, type, handelIsEdit, handelSelectedItem }) => {
   function handelEdit(data) {
@@ -73,6 +85,7 @@ const NetDataTable = ({ data, type, handelIsEdit, handelSelectedItem }) => {
             paginationModel: { page: 0, pageSize: 5 },
           },
         }}
+        slots={{ toolbar: CustomToolbar }}
         pageSizeOptions={[5, 10]}
         disableRowSelectionOnClick
       />

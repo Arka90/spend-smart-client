@@ -62,8 +62,6 @@ const Home = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
 
-  // if (api.isLoading) return <Loader />;
-
   function handelChangeDate() {
     if (!value) {
       setDate(new Date());

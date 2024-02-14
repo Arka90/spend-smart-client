@@ -10,6 +10,8 @@ import {
   DataGrid,
   GridActionsCellItem,
   GridRowEditStopReasons,
+  GridToolbarContainer,
+  GridToolbarExport,
 } from "@mui/x-data-grid";
 
 import { NetDataContext } from "../context/netDataContext/netDataContext";
@@ -19,6 +21,14 @@ import updateExpense from "../lib/expense/updateExpense";
 import getAllExpenses from "../lib/expense/getAllExpenses";
 import getAllIncome from "../lib/income/getAllIncome";
 import deleteExpense from "../lib/expense/deleteExpense";
+
+function CustomToolbar() {
+  return (
+    <GridToolbarContainer>
+      <GridToolbarExport />
+    </GridToolbarContainer>
+  );
+}
 
 export default function ExpenseTable({ data }) {
   const initialRows = data.map((curr) => {
@@ -223,6 +233,12 @@ export default function ExpenseTable({ data }) {
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
+        slots={{ toolbar: CustomToolbar }}
+        initialState={{
+          ...data.initialState,
+          pagination: { paginationModel: { pageSize: 5 } },
+        }}
+        pageSizeOptions={[5, 10, 25]}
       />
     </Box>
   );
