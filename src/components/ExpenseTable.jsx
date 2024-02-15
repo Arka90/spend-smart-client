@@ -134,7 +134,6 @@ export default function ExpenseTable({ data }) {
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
-    console.log(newRowModesModel);
     setRowModesModel(newRowModesModel);
   };
 
@@ -155,7 +154,13 @@ export default function ExpenseTable({ data }) {
       width: 220,
       editable: true,
       type: "singleSelect",
-      valueOptions: ["Salary", "Freelancing", "Passive Income", "Others"],
+      valueOptions: [
+        "Salary",
+        "Freelancing",
+        "Food",
+        "Passive Income",
+        "Others",
+      ],
     },
     {
       field: "actions",

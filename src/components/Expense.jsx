@@ -8,6 +8,7 @@ import getAllExpenses from "../lib/expense/getAllExpenses";
 import getAllIncome from "../lib/income/getAllIncome";
 import Form from "./Form";
 import ExpenseTable from "./ExpenseTable";
+import Loader from "./Loader";
 
 const Expense = () => {
   const {
@@ -59,41 +60,65 @@ const Expense = () => {
           Expense Management
         </Typography>
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          marginTop: "40px",
-          gap: "28px",
-          justifyContent: { xs: "space-around", md: "flex-start" },
-        }}
-      >
-        <StatsCards color="#00796B" title="NET INCOME" value={totalNetIncome} />
-        <StatsCards
-          color="#B71C1C"
-          title="NET EXPENSE"
-          value={totalNetExpense}
-        />
-        <StatsCards color="#1565C0" title="NET SAVING" value={totalNetSaving} />
-      </Box>
 
-      <Box display="flex" flexWrap="wrap" gap="40px" marginTop="20px">
-        <Box flex={2} padding="10px">
-          <Typography variant="h3" fontWeight={700}>
-            Table For Expense
-          </Typography>
-          <Form type="expense" />
-          <ExpenseTable data={netExpense} />
-        </Box>
-        <Box
-          flex={1}
-          display="flex"
-          alignItems="center"
-          justifyContent="flex-start"
-        >
-          <PieChart chartData={netExpense} />
-        </Box>
-      </Box>
+      {api.isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              marginTop: "40px",
+              gap: "28px",
+              justifyContent: {
+                xs: "flex-start",
+                sm: "center",
+                md: "flex-start",
+              },
+              maxWidth: { xs: "500px", sm: "590px", md: "890px", lg: "100%" },
+            }}
+          >
+            <StatsCards
+              color="#00796B"
+              title="NET INCOME"
+              value={totalNetIncome}
+            />
+            <StatsCards
+              color="#B71C1C"
+              title="NET EXPENSE"
+              value={totalNetExpense}
+            />
+            <StatsCards
+              color="#1565C0"
+              title="NET SAVING"
+              value={totalNetSaving}
+            />
+          </Box>
+
+          <Box display="flex" flexWrap="wrap" gap="40px" marginTop="20px">
+            <Box flex={2} padding="10px">
+              <Typography
+                variant="h3"
+                fontWeight={700}
+                sx={{ fontSize: { xs: "2rem", md: "3rem" } }}
+              >
+                Table For Expense
+              </Typography>
+              <Form type="expense" />
+              <ExpenseTable data={netExpense} />
+            </Box>
+            <Box
+              flex={1}
+              display="flex"
+              alignItems="center"
+              justifyContent="flex-start"
+            >
+              <PieChart chartData={netExpense} />
+            </Box>
+          </Box>
+        </>
+      )}
     </Box>
   );
 };

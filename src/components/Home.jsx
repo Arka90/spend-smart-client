@@ -1,4 +1,5 @@
 import { Box, Button, Typography } from "@mui/material";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import StatsCards from "./StatsCards";
 import MonthlyDataTable from "./MonthlyDataTable";
 import { useContext, useEffect, useState } from "react";
@@ -75,7 +76,10 @@ const Home = () => {
   return (
     <Box>
       <Box>
-        <Typography variant="h3" sx={{ fontSize: { xs: "2rem", md: "3rem" } }}>
+        <Typography
+          variant="h3"
+          sx={{ fontSize: { xs: "1.5rem", md: "3rem", sm: "2rem" } }}
+        >
           Stats for the month of{" "}
           {showPicker ? (
             <Box display="inline">
@@ -89,12 +93,15 @@ const Home = () => {
               </Button>
             </Box>
           ) : (
-            <span
+            <Box
+              display="inline"
+              color="primary.main"
               className="cursor-pointer"
               onClick={() => setShowPicker(true)}
             >
-              {date.toString().split(" ")[1]}, {date.getFullYear()}
-            </span>
+              {date.toString().split(" ")[1]} {date.getFullYear()}{" "}
+              <KeyboardArrowDownIcon />
+            </Box>
           )}
         </Typography>
       </Box>
@@ -108,7 +115,11 @@ const Home = () => {
               flexWrap: "wrap",
               marginTop: "40px",
               gap: "28px",
-              justifyContent: { xs: "space-around", md: "flex-start" },
+              justifyContent: {
+                xs: "flex-start",
+                sm: "center",
+                md: "flex-start",
+              },
             }}
           >
             <StatsCards
