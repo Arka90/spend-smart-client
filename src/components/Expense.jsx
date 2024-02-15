@@ -56,7 +56,10 @@ const Expense = () => {
   return (
     <Box>
       <Box>
-        <Typography variant="h3" sx={{ fontSize: { xs: "2rem", md: "3rem" } }}>
+        <Typography
+          variant="h3"
+          sx={{ fontSize: { xs: "1.5rem", md: "3rem", sm: "2rem" } }}
+        >
           Expense Management
         </Typography>
       </Box>

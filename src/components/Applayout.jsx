@@ -8,6 +8,7 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import NewspaperIcon from "@mui/icons-material/Newspaper";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -80,6 +81,7 @@ const Applayout = () => {
     { title: "Home", path: "/home", icon: <Home /> },
     { title: "Income", path: "/income", icon: <AccountBalanceWallet /> },
     { title: "Expense", path: "/expense", icon: <PaymentOutlined /> },
+    { title: "News", path: "/news", icon: <NewspaperIcon /> },
   ];
   if (!getUserToken()) return <Navigate to="signin" />;
 
