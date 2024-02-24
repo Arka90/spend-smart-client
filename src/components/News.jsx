@@ -1,9 +1,10 @@
 import { Box, Typography } from "@mui/material";
 import NewsCard from "./NewsCard";
 import { useEffect, useState } from "react";
-import axios from "../config/axios";
+import { nanoid } from "nanoid";
 import useApi from "../hooks/useApi";
 import Loader from "./Loader";
+import getTopFinancialNews from "../lib/news/getTopFinancialNews";
 
 const News = () => {
   const [news, setNews] = useState([]);
@@ -14,11 +15,8 @@ const News = () => {
     async function getNews() {
       api.startLoading();
       try {
-        const data = await axios.get(
-          "https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=fe0cd0589e0742d6aab06eb476790fae"
-        );
-
-        setNews(data.data.articles);
+        const newsdata = await getTopFinancialNews();
+        setNews(newsdata.data);
       } catch (error) {
         api.setError(error.message);
       } finally {
@@ -52,7 +50,7 @@ const News = () => {
             }}
           >
             {news.map((article) => (
-              <NewsCard key={Date.now()} article={article} />
+              <NewsCard key={nanoid()} article={article} />
             ))}
           </Box>
         </>
