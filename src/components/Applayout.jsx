@@ -17,6 +17,7 @@ import logo from "../assets/logo-color.svg";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import {
   AccountBalanceWallet,
+  ChatSharp,
   Home,
   LogoutOutlined,
   PaymentOutlined,
@@ -82,6 +83,7 @@ const Applayout = () => {
     { title: "Income", path: "/income", icon: <AccountBalanceWallet /> },
     { title: "Expense", path: "/expense", icon: <PaymentOutlined /> },
     { title: "News", path: "/news", icon: <NewspaperIcon /> },
+    { title: "Chats", path: "/chats", icon: <ChatSharp /> },
   ];
   if (!getUserToken()) return <Navigate to="signin" />;
 
@@ -93,7 +95,6 @@ const Applayout = () => {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           {open && <img src={logo} width={200} />}

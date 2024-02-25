@@ -6,6 +6,8 @@ import Home from "./components/Home";
 import Expense from "./components/Expense";
 import Income from "./components/Income";
 import News from "./components/News";
+import Chat from "./components/Chat";
+import CreateChannel from "./components/CreateChannel";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +33,14 @@ const router = createBrowserRouter([
       {
         path: "/news",
         element: <News />,
+      },
+      {
+        path: "/chats",
+        element: <Chat />,
+      },
+      {
+        path: "/create-channel",
+        element: <CreateChannel />,
       },
     ],
   },
