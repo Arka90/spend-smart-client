@@ -35,8 +35,8 @@ const AuthForm = ({ type }) => {
   const { setCurrentUser, setToken } = useContext(UserContext);
   const formik = useFormik({
     initialValues: {
-      username: "arka91",
-      password: "test1234",
+      username: "",
+      password: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
