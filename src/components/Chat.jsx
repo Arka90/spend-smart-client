@@ -18,7 +18,6 @@ import { Box } from "@mui/system";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router";
 
-const filters = { type: "messaging" };
 const options = { state: true, presence: true, limit: 10 };
 const sort = { last_message_at: -1 };
 
@@ -55,7 +54,11 @@ const Chat = () => {
             Create Channel
           </Button>
 
-          <ChannelList filters={filters} sort={sort} options={options} />
+          <ChannelList
+            filters={{ members: { $in: [getUserId()] }, type: "messaging" }}
+            sort={sort}
+            options={options}
+          />
         </Box>
         <Box flex={4}>
           <Channel>
