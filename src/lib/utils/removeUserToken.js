@@ -1,4 +1,6 @@
 export default function removeUserToken() {
-  console.log("here");
   localStorage.removeItem("token");
+  localStorage.removeItem("chat_token");
+  localStorage.removeItem("user_id");
+  localStorage.removeItem("user_name");
 }

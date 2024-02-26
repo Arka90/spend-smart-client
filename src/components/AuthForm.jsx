@@ -32,11 +32,11 @@ const validationSchema = yup.object({
 const AuthForm = ({ type }) => {
   const api = useApi();
   const navigate = useNavigate();
-  const { setCurrentUser } = useContext(UserContext);
+  const { setCurrentUser, setToken } = useContext(UserContext);
   const formik = useFormik({
     initialValues: {
-      username: "",
-      password: "",
+      username: "arka91",
+      password: "test1234",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -50,8 +50,10 @@ const AuthForm = ({ type }) => {
         } else {
           response = await signup(values);
         }
+
         setCurrentUser(response.data.user);
-        setUserToken(response.token);
+        setUserToken(response.token, response.chatToken, response.data.user);
+        setToken(response.chatToken);
         navigate("/");
         api.setSuccess();
       } catch (error) {
