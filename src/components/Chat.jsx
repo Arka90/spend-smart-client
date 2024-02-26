@@ -23,7 +23,7 @@ const options = { state: true, presence: true, limit: 10 };
 const sort = { last_message_at: -1 };
 
 const Chat = () => {
-  const client = new StreamChat("mvmyte5tn7pb");
+  const client = new StreamChat("xc8uzz5rmcs5");
 
   const navigate = useNavigate();
 
